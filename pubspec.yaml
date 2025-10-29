@@ -38,7 +38,32 @@ dependencies:
   facesdk_plugin:
     path: ./facesdk_plugin
   flutter_exif_rotation: ^0.5.1
-
+  
+  # State Management & Architecture
+  get_it: ^7.6.0
+  flutter_bloc: ^8.1.2
+  bloc: ^8.1.1
+  equatable: ^2.0.5
+  
+  # Localization
+  flutter_translate: ^4.1.0
+  intl: ^0.20.2
+  flutter_localizations:
+    sdk: flutter
+    
+  # Camera & Image Processing
+  camera: ^0.11.2
+  image: ^4.5.4
+  
+  # Permissions & File Access
+  permission_handler: ^12.0.1
+  path_provider: ^2.1.5
+  
+  # Storage
+  shared_preferences: ^2.2.2
+  
+  # UI Components
+  fluttertoast: ^8.2.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -49,14 +74,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  settings_ui: ^2.0.2
-  image_picker: ^1.1.2
-  sqflite: 2.4.1
-  fluttertoast:
-  shared_preferences:
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+dependency_overrides:
+  intl: ^0.20.2
 
 # The following section is specific to Flutter packages.
 flutter:
