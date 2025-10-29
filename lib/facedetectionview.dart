@@ -1,20 +1,16 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:facesdk_plugin/facedetection_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:facesdk_plugin/facesdk_plugin.dart';
-import 'person.dart';
 
 // ignore: must_be_immutable
 class FaceRecognitionView extends StatefulWidget {
-  final List<Person> personList;
   FaceDetectionViewController? faceDetectionViewController;
 
-  FaceRecognitionView({super.key, required this.personList});
+  FaceRecognitionView({super.key});
 
   @override
   State<StatefulWidget> createState() => FaceRecognitionViewState();
@@ -88,23 +84,6 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
     // ignore: prefer_typing_uninitialized_variables
     var enrolledFace, identifedFace;
     if (faces.length > 0) {
-      var face = faces[0];
-      for (var person in widget.personList) {
-        double similarity = await _facesdkPlugin.similarityCalculation(
-                face['templates'], person.templates) ??
-            -1;
-        if (maxSimilarity < similarity) {
-          maxSimilarity = similarity;
-          maxSimilarityName = person.name;
-          maxLiveness = face['liveness'];
-          maxYaw = face['yaw'];
-          maxRoll = face['roll'];
-          maxPitch = face['pitch'];
-          identifedFace = face['faceJpg'];
-          enrolledFace = person.faceJpg;
-        }
-      }
-
       if (maxSimilarity > _identifyThreshold &&
           maxLiveness > _livenessThreshold) {
         recognized = true;
