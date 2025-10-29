@@ -1,16 +1,21 @@
-import 'package:facerecognition_flutter/core/usecase/usecase.dart';
-import 'package:facerecognition_flutter/face_result_model.dart';
-import 'package:facerecognition_flutter/features/face_tracking/domain/repository/face_tracking_repository.dart';
+import '../../../../core/usecase/usecase.dart';
+import '../../../../core/resources/data_state.dart';
+import '../models/face_result.dart';
+import '../repository/face_tracking_repository.dart';
 
-/// Use case for getting face detection results stream
-class GetFaceDetectionStreamUseCase
-    implements UseCase<Stream<FaceResult>, NoParams> {
+/// Use case for getting face detection results stream from KBY-AI SDK
+class GetFaceDetectionStream implements UseCaseNoParams<Stream<DataState<List<FaceResult>>>> {
   final FaceTrackingRepository _repository;
 
-  GetFaceDetectionStreamUseCase(this._repository);
+  const GetFaceDetectionStream(this._repository);
 
   @override
-  Future<Stream<FaceResult>> call({NoParams? params}) async {
-    return _repository.processImageStream();
+  Future<DataState<Stream<DataState<List<FaceResult>>>>> call() async {
+    try {
+      final stream = _repository.processImageStream();
+      return DataSuccess(stream);
+    } catch (e) {
+      return DataFailed('Failed to get detection stream: $e');
+    }
   }
 }

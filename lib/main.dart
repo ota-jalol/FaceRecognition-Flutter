@@ -1,14 +1,36 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:facerecognition_flutter/features/face_recognition/presentation/pages/face_id_take_photo_v2.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:facesdk_plugin/facesdk_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io' show Platform;
-import 'settings.dart';
-import 'facedetectionview.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+import 'core/di/app_dependencies.dart';
+import 'features/face_tracking/presentation/services/face_tracking_service.dart';
+import 'localization/my_localization.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  List<String> supportedLocales = const ["uz", "ru", "en", "fr", "cuz"];
+  // Initialize localization
+  await MyLocalization().initialize(
+    supportedLocales: supportedLocales,
+    actualLang: "uz"
+
+  );
+  
+  // Initialize dependencies
+  await AppDependencies.initialize();
+  
+  // Initialize face tracking service
+  try {
+    await FaceTrackingService.instance.initialize();
+  } catch (e) {
+    debugPrint('⚠️ Failed to initialize FaceTrackingService in main: $e');
+  }
+  
   runApp(const MyApp());
 }
 
@@ -17,14 +39,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MyLocalization.localizedApp(
+      MaterialApp(
         title: 'Face Recognition',
         theme: ThemeData(
           // Define the default brightness and colors.
           useMaterial3: true,
           brightness: Brightness.dark,
         ),
-        home: MyHomePage(title: 'Face Recognition'));
+        home: const MyHomePage(title: 'Face Recognition'),
+      ),
+    );
   }
 }
 
@@ -32,7 +57,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   final String title;
 
-  MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title});
 
   @override
   MyHomePageState createState() => MyHomePageState();
@@ -40,77 +65,28 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage> {
 
-  final _facesdkPlugin = FacesdkPlugin();
-
   @override
   void initState() {
     super.initState();
-
     init();
   }
 
   Future<void> init() async {
-    int facepluginState = -1;
-
-    try {
-      if (Platform.isAndroid) {
-        await _facesdkPlugin
-            .setActivation(
-                "j63rQnZifPT82LEDGFa+wzorKx+M55JQlNr+S0bFfvMULrNYt+UEWIsa11V/Wk1bU9Srti0/FQqp"
-                "UczeCxFtiEcABmZGuTzNd27XnwXHUSIMaFOkrpNyNE4MHb7HBm5kU/0J/SAMfybICCWyFajuZ4fL"
-                "agozJV5DPKj22oFVaueWMjO/9fMvcps4u1AIiHH2rjP4mEYfiAE8nhHBa1Ou3u/WkXj6jdDafyJo"
-                "AFtQHYJYKDU+hcbtCZ3P1f8y1JB5JxOf92ItK4euAt6/OFG9jGfKpo/Fs2mAgwxH3HoWMLJQ16Iy"
-                "u2K6boMyDxRQtBJFTiktuJ+ltlay+dVqIi3Jpg==")
-            .then((value) => facepluginState = value ?? -1);
-      } else {
-        await _facesdkPlugin
-            .setActivation(
-                "qtUa0F+8kUQ3IKx0KnH7INdhZobNEry1toTG1IqYBCeFFj66uMc2Znp3Tlj+fPdO212bCJrRCK27"
-                "xKyn0qNtbRene869aUDxMf9nZyPDVDuWoz6TZKdKhgAGlQ65RoLAunUrbLfIwR/OqqZU8zwxwAYU"
-                "BPn6f7X0zkoAFDwMUgBMR87RQdLDkGssfCDOmyOYW3qq1hX9k9FZvFMuC6nzJQhQgAy1edFJ4YuW"
-                "g5BKXKsulTTzq2cPwz0qPUNp1qR75OitXjo9KoojhJEM6Hj7n8l6ydcPpZpdpUURrn5/7RLEVteX"
-                "l84vhHGm6jXjOftcNdR1ikC7wM2hhfVQuhK0gA==")
-            .then((value) => facepluginState = value ?? -1);
-      }
-
-      if (facepluginState == 0) {
-        await _facesdkPlugin
-            .init()
-            .then((value) => facepluginState = value ?? -1);
-      }
-    } catch (e) {}
-    await SettingsPageState.initSettings();
 
     final prefs = await SharedPreferences.getInstance();
     int? livenessLevel = prefs.getInt("liveness_level");
 
-    try {
-      await _facesdkPlugin
-          .setParam({'check_liveness_level': livenessLevel ?? 0});
-    } catch (e) {}
+    // Configuration will be handled by FaceTrackingConfig
+    debugPrint('💼 Liveness level from settings: ${livenessLevel ?? 0}');
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
-
-    if (facepluginState == -1) {
-    } else if (facepluginState == -2) {
-    } else if (facepluginState == -3) {
-    } else if (facepluginState == -4) {
-    } else if (facepluginState == -5) {
-    }
-
-    
   }
 
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Face Recognition'),
+        title: Text(tr('app_title')),
         toolbarHeight: 70,
         centerTitle: true,
       ),
@@ -118,13 +94,13 @@ class MyHomePageState extends State<MyHomePage> {
         margin: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: Column(
           children: <Widget>[
-            const Card(
-                color: Color.fromARGB(255, 0x49, 0x45, 0x4F),
+            Card(
+                color: const Color.fromARGB(255, 0x49, 0x45, 0x4F),
                 child: ListTile(
-                  leading: Icon(Icons.tips_and_updates),
+                  leading: const Icon(Icons.tips_and_updates),
                   subtitle: Text(
-                    'KBY-AI offers SDKs for face recognition, liveness detection, and id document recognition.',
-                    style: TextStyle(fontSize: 13),
+                    tr('kby_ai_description'),
+                    style: const TextStyle(fontSize: 13),
                   ),
                 )),
             const SizedBox(
@@ -133,7 +109,7 @@ class MyHomePageState extends State<MyHomePage> {
            Expanded(
                   flex: 1,
                   child: ElevatedButton.icon(
-                      label: const Text('Identify'),
+                      label: Text(tr('identify')),
                       icon: const Icon(
                         Icons.person_search,
                       ),
@@ -149,46 +125,25 @@ class MyHomePageState extends State<MyHomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FaceRecognitionView(
-                                   
-                                  )),
+                              builder: (context) => BlocProvider(
+                                create: (context) => AppDependencies.getIt<FaceRecognitionBloc>(),
+                                child: FaceIDTakePhoto(
+                                  onTake: (photoBytes) {
+                                    // Handle the captured photo bytes
+                                    debugPrint('Photo captured with ${photoBytes.length} bytes');
+                                    // You can save the photo, navigate to another screen, etc.
+                                    Navigator.pop(context);
+                                  },
+                                  boxHeight: 300,
+                                  boxWidth: 300,
+                                  title: tr('face_recognition'),
+                                ),
+                              )),
                         );
                       }),
                 ),
               
-            
-            Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton.icon(
-                      label: const Text('Settings'),
-                      icon: const Icon(
-                        Icons.settings,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primaryContainer,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12.0)),
-                          )),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SettingsPage(
-                                    homePageState: this,
-                                  )),
-                        );
-                      }),
-                ),
-               
-               
-              ],
-            ),
-         
+           
           ],
         ),
       ),

@@ -1,19 +1,17 @@
 import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_state.dart';
-import 'package:camera/camera.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for displaying the face detection circle with camera preview
 class FaceDetectionCircle extends StatelessWidget {
   final Size screenSize;
   final FaceRecognitionState state;
-  final CameraController? controller;
-  final CameraLensDirection lens;
+  final Function(List<dynamic>)? onFaceDetected;
 
   const FaceDetectionCircle({
     required this.screenSize,
     required this.state,
-    required this.controller,
-    required this.lens,
+    this.onFaceDetected,
     super.key,
   });
 
@@ -139,23 +137,20 @@ class FaceDetectionCircle extends StatelessWidget {
   }
 
   Widget _buildCameraPreview() {
-    if (controller == null || !controller!.value.isInitialized) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFF60A5FA),
-          strokeWidth: 3,
-        ),
-      );
-    }
-
     return AspectRatio(
       aspectRatio: 1, // kvadrat
-      child: FittedBox(
-        fit: BoxFit.cover, // nisbatni saqlaydi, kvadratga to'ldiradi
+      child: ClipOval(
         child: SizedBox(
-          width: controller!.value.previewSize!.height,
-          height: controller!.value.previewSize!.width,
-          child: CameraPreview(controller!),
+          width: double.infinity,
+          height: double.infinity,
+          child: CameraPreviewWidget(
+            onFaceDetected: (faces) {
+              // Handle face detection events and forward to parent
+              if (onFaceDetected != null) {
+                onFaceDetected!(faces);
+              }
+            },
+          ),
         ),
       ),
     );

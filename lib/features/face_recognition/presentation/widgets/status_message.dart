@@ -162,7 +162,7 @@ class StatusMessage extends StatelessWidget {
     }
 
     return _MessageData(
-      message: tr('camera_initializing'),
+      message: tr('no_face_detected'),
       color: const Color(0xFF94A3B8), // Slate grey
       icon: Icons.camera_alt,
       textColor: const Color(0xFF334155), // Dark slate
