@@ -24,7 +24,7 @@
   "no_face_detected": "Yuz aniqlanmadi",
   "center_face_please": "Iltimos, yuzingizni markazga joylashtiring",
   "face_detected_good": "Yuz aniqlandi! Harakatsiz turing...",
-  "face_too_close_or_spoof": "Orqaga chekiling yoki haqiqiy yuz ko'rsating",
+  "face_too_close_or_spoof":"yuz aniqlanmadi yoki xaqiqiy emas",
   "tips": "Foydali maslahatlar",
   "tip_good_lighting": "Yaxshi yoritilgan joyda bo'ling",
   "tip_face_camera_directly": "Yuzingizni to'g'ridan-to'g'ri kameraga qarating",

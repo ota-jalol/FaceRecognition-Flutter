@@ -15,22 +15,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   List<String> supportedLocales = const ["uz", "ru", "en", "fr", "cuz"];
   // Initialize localization
-  await MyLocalization().initialize(
-    supportedLocales: supportedLocales,
-    actualLang: "uz"
+  await MyLocalization()
+      .initialize(supportedLocales: supportedLocales, actualLang: "uz");
 
-  );
-  
   // Initialize dependencies
   await AppDependencies.initialize();
-  
+
   // Initialize face tracking service
   try {
     await FaceTrackingService.instance.initialize();
   } catch (e) {
     debugPrint('⚠️ Failed to initialize FaceTrackingService in main: $e');
   }
-  
+
   runApp(const MyApp());
 }
 
@@ -64,7 +61,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -72,7 +68,6 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> init() async {
-
     final prefs = await SharedPreferences.getInstance();
     int? livenessLevel = prefs.getInt("liveness_level");
 
@@ -106,44 +101,20 @@ class MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 6,
             ),
-           Expanded(
-                  flex: 1,
-                  child: ElevatedButton.icon(
-                      label: Text(tr('identify')),
-                      icon: const Icon(
-                        Icons.person_search,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primaryContainer,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12.0)),
-                          )),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                create: (context) => AppDependencies.getIt<FaceRecognitionBloc>(),
-                                child: FaceIDTakePhoto(
-                                  onTake: (photoBytes) {
-                                    // Handle the captured photo bytes
-                                    debugPrint('Photo captured with ${photoBytes.length} bytes');
-                                    // You can save the photo, navigate to another screen, etc.
-                                    Navigator.pop(context);
-                                  },
-                                  boxHeight: 300,
-                                  boxWidth: 300,
-                                  title: tr('face_recognition'),
-                                ),
-                              )),
-                        );
-                      }),
-                ),
-              
-           
+            Expanded(
+              flex: 1,
+              child: FaceIDTakePhoto(
+                onTake: (photoBytes) {
+                  // Handle the captured photo bytes
+                  debugPrint('Photo captured with ${photoBytes.length} bytes');
+                  // You can save the photo, navigate to another screen, etc.
+                  Navigator.pop(context);
+                },
+                boxHeight: 300,
+                boxWidth: 300,
+                title: tr('face_recognition'),
+              ),
+            )
           ],
         ),
       ),

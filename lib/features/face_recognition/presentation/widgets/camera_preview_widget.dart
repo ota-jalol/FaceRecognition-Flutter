@@ -83,15 +83,15 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
           },
         ),
         // Face detection overlay
-        if (_faces != null)
-          Positioned.fill(
-            child: CustomPaint(
-              painter: FacePainter(
-                faces: _faces,
-                livenessThreshold: _livenessThreshold,
-              ),
-            ),
-          ),
+        // if (_faces != null)
+        //   Positioned.fill(
+        //     child: CustomPaint(
+        //       painter: FacePainter(
+        //         faces: _faces,
+        //         livenessThreshold: _livenessThreshold,
+        //       ),
+        //     ),
+        //   ),
       ],
     );
   }
