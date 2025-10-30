@@ -5,8 +5,6 @@ import 'package:facesdk_plugin/facesdk_plugin.dart';
 import '../../features/face_tracking/data/repository/face_tracking_repository_impl.dart';
 import '../../features/face_tracking/domain/repository/face_tracking_repository.dart';
 import '../../features/face_tracking/domain/use_cases/initialize_tracking_service.dart';
-import '../../features/face_tracking/domain/use_cases/submit_image_for_processing.dart';
-import '../../features/face_tracking/domain/use_cases/get_face_detection_stream.dart';
 import '../../features/face_tracking/presentation/bloc/face_tracking_bloc.dart';
 
 /// Dependency injection configuration
@@ -31,20 +29,14 @@ class AppDependencies {
       () => InitializeTrackingService(_getIt<FaceTrackingRepository>()),
     );
     
-    _getIt.registerLazySingleton(
-      () => SubmitImageForProcessing(_getIt<FaceTrackingRepository>()),
-    );
     
-    _getIt.registerLazySingleton(
-      () => GetFaceDetectionStream(_getIt<FaceTrackingRepository>()),
-    );
+    
+    
 
     // BLoC
     _getIt.registerFactory(
       () => FaceTrackingBloc(
         initializeTrackingService: _getIt<InitializeTrackingService>(),
-        submitImageForProcessing: _getIt<SubmitImageForProcessing>(),
-        getFaceDetectionStream: _getIt<GetFaceDetectionStream>(),
       ),
     );
     _getIt.registerFactory(()=>FaceRecognitionBloc());

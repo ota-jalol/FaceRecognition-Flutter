@@ -116,10 +116,10 @@ public class FaceDetectionFlutterView implements PlatformView, MethodCallHandler
         List<FaceBox> faceBoxes = FaceSDK.faceDetection(bitmap, param);
         for (FaceBox faceBox : faceBoxes) {
             // byte[] templates = FaceSDK.templateExtraction(bitmap, faceBox);
-            // Bitmap faceImage = Utils.cropFace(bitmap, faceBox);
-            // ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            // faceImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            // byte[] faceJpg = byteArrayOutputStream.toByteArray();
+            Bitmap faceImage = Utils.cropFace(bitmap, faceBox);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            faceImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] faceJpg = byteArrayOutputStream.toByteArray();
 
             HashMap<String, Object> e = new HashMap<>();
             e.put("x1", faceBox.x1);
@@ -131,7 +131,7 @@ public class FaceDetectionFlutterView implements PlatformView, MethodCallHandler
             e.put("roll", faceBox.roll);
             e.put("pitch", faceBox.pitch);
             // e.put("templates", templates);
-            // e.put("faceJpg", faceJpg);
+            e.put("faceJpg", faceJpg);
             e.put("frameWidth", bitmap.getWidth());
             e.put("frameHeight", bitmap.getHeight());
 

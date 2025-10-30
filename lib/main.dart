@@ -79,44 +79,18 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(tr('app_title')),
-        toolbarHeight: 70,
-        centerTitle: true,
-      ),
-      body: Container(
-        margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-        child: Column(
-          children: <Widget>[
-            Card(
-                color: const Color.fromARGB(255, 0x49, 0x45, 0x4F),
-                child: ListTile(
-                  leading: const Icon(Icons.tips_and_updates),
-                  subtitle: Text(
-                    tr('kby_ai_description'),
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                )),
-            const SizedBox(
-              height: 6,
-            ),
-            Expanded(
-              flex: 1,
-              child: FaceIDTakePhoto(
-                onTake: (photoBytes) {
-                  // Handle the captured photo bytes
-                  debugPrint('Photo captured with ${photoBytes.length} bytes');
-                  // You can save the photo, navigate to another screen, etc.
-                  Navigator.pop(context);
-                },
-                boxHeight: 300,
-                boxWidth: 300,
-                title: tr('face_recognition'),
-              ),
-            )
-          ],
-        ),
+    return BlocProvider(
+      create: (context) => AppDependencies.getIt<FaceRecognitionBloc>(),
+      child: FaceIDTakePhoto(
+        onTake: (photoBytes) {
+          // Handle the captured photo bytes
+          debugPrint('Photo captured with ${photoBytes.length} bytes');
+          // You can save the photo, navigate to another screen, etc.
+          Navigator.pop(context);
+        },
+        boxHeight: 300,
+        boxWidth: 300,
+        title: tr('face_recognition'),
       ),
     );
   }
