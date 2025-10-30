@@ -39,5 +39,7 @@
   "fake_face_detected": "⚠️ Soxta yuz aniqlandi! Haqiqiy yuz ko'rsating",
   "preparing_photo": "Rasm tayyorlanmoqda...",
   "photo_captured_success": "Rasm muvaffaqiyatli olindi!",
-  "face_recognition": "Yuzni tanish"
+  "face_recognition": "Yuzni tanish",
+  "taking_photo": "1 sekundda rasm olinadi...",
+  "photo_captured": "Rasm muvaffaqiyatli olindi!"
 }

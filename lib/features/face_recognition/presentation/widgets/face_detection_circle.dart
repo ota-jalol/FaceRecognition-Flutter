@@ -1,5 +1,5 @@
-import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_state.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
+import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_state.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for displaying the face detection circle with camera preview

@@ -1,13 +1,14 @@
-import 'package:facerecognition_flutter/core/constants/app_constants.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_state.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/face_detection_circle.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/status_message.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/tips_section.dart';
-import 'package:facerecognition_flutter/face_result_model.dart';
-import 'package:facerecognition_flutter/localization/my_localization.dart';
+import 'package:asbt/core/constants/app_constants.dart';
+import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
+import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_state.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/face_detection_circle.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/status_message.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/tips_section.dart';
+import 'package:asbt/face_result_model.dart';
+import 'package:asbt/localization/my_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 
 /// Modern Face ID screen with clean architecture and BLoC pattern
 class FaceIDTakePhoto extends StatelessWidget {
@@ -60,6 +61,12 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
   String _currentMessage = "";
   bool _faceDetected = false;
   bool _isCentered = false;
+  
+  // Photo capture logic
+  int _consecutiveFaceDetections = 0;
+  bool _isCapturingPhoto = false;
+  bool _photoTaken = false;
+  Timer? _captureTimer;
 
   @override
   void initState() {
@@ -80,6 +87,11 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
         _faceDetected = false;
         _isCentered = false;
         _currentMessage = tr('no_face_detected');
+        
+        // Yuz topilmadi, hisoblagichni qayta boshlash
+        _consecutiveFaceDetections = 0;
+        _captureTimer?.cancel();
+        _captureTimer = null;
       } else {
         _faceDetected = true;
 
@@ -96,6 +108,9 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
 
         if (frameWidth <= 0 || frameHeight <= 0) {
           _currentMessage = tr('face_not_detected');
+          _consecutiveFaceDetections = 0;
+          _captureTimer?.cancel();
+          _captureTimer = null;
           return;
         }
 
@@ -109,15 +124,39 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
         _isCentered = distanceFromCenter < 0.15; // Adjust threshold as needed
 
         double liveness = (face['liveness'] as num?)?.toDouble() ?? 0.0;
-        if (liveness > 0.7) {
-          // Liveness threshold
-          if (_isCentered) {
-            _currentMessage = tr('face_detected_good');
-          } else {
-            _currentMessage = tr('center_face_please');
+        
+        // Yuz sifatli va markazda bo'lsa
+        if (liveness > 0.7 && _isCentered && !_photoTaken) {
+          // Ketma-ket topilgan yuzlar hisoblagichini oshirish
+          _consecutiveFaceDetections++;
+          
+          if (_consecutiveFaceDetections >= 5 && !_isCapturingPhoto) {
+            // 5 marta ketma-ket yuz topildi, rasm olish jarayonini boshlash
+            _isCapturingPhoto = true;
+            _currentMessage = tr('taking_photo');
+            
+            // 1 sekund kutib rasm olish
+            _captureTimer = Timer(Duration(seconds: 1), () {
+              _capturePhoto(face['faceJpg']);
+            });
+          } else if (_consecutiveFaceDetections < 5) {
+            _currentMessage = '${tr('face_detected_good')} ($_consecutiveFaceDetections/5)';
           }
         } else {
-          _currentMessage = tr('face_too_close_or_spoof');
+          // Yuz sifatsiz yoki markazda emas
+          _consecutiveFaceDetections = 0;
+          _captureTimer?.cancel();
+          _captureTimer = null;
+          
+          if (liveness > 0.7) {
+            if (_isCentered) {
+              _currentMessage = tr('face_detected_good');
+            } else {
+              _currentMessage = tr('center_face_please');
+            }
+          } else {
+            _currentMessage = tr('face_too_close_or_spoof');
+          }
         }
       }
     });
@@ -132,6 +171,9 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
   @override
   void dispose() {
     debugPrint('📱 [LIFECYCLE] FaceIDTakePhoto.dispose() START');
+
+    // Timer'ni bekor qilish
+    _captureTimer?.cancel();
 
     // Remove lifecycle observer
     WidgetsBinding.instance.removeObserver(this);
@@ -280,5 +322,18 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
     }
 
     return true;
+  }
+
+  void _capturePhoto(dynamic img) {
+    if (!mounted || _photoTaken) return;
+    widget.onTake(img);
+    setState(() {
+      _photoTaken = true;
+      _isCapturingPhoto = false;
+      _currentMessage = tr('photo_captured');
+    });
+    
+    // Bu yerda rasm olish logikasi qo'shiladi
+    // Masalan: BlocProvider.of<FaceRecognitionBloc>(context).add(CapturePhotoEvent());
   }
 }

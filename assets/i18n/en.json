@@ -39,5 +39,7 @@
   "fake_face_detected": "⚠️ Fake face detected! Show real face",
   "preparing_photo": "Preparing photo...",
   "photo_captured_success": "Photo captured successfully!",
-  "face_recognition": "Face Recognition"
+  "face_recognition": "Face Recognition",
+  "taking_photo": "Taking photo in 1 second...",
+  "photo_captured": "Photo captured successfully!"
 }

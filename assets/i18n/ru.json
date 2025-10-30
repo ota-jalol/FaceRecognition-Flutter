@@ -39,5 +39,7 @@
   "fake_face_detected": "⚠️ Обнаружено поддельное лицо! Покажите настоящее лицо",
   "preparing_photo": "Подготовка фото...",
   "photo_captured_success": "Фото успешно сделано!",
-  "face_recognition": "Распознавание лица"
+  "face_recognition": "Распознавание лица",
+  "taking_photo": "Фото снимается через 1 секунду...",
+  "photo_captured": "Фото успешно сделано!"
 }

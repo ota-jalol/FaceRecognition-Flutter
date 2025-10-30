@@ -1,4 +1,4 @@
-import 'package:facerecognition_flutter/face_result_model.dart';
+import 'package:asbt/face_result_model.dart';
 import 'package:equatable/equatable.dart';
 
 /// Base class for Face Recognition states

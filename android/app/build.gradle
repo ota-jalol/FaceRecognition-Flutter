@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'dev.flutter.flutter-gradle-plugin'
 
 android {
-    namespace "com.example.facerecognition_flutter"
+    namespace "com.example.asbt"
     compileSdk = 36
     ndkVersion flutter.ndkVersion
 
@@ -44,7 +44,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.kbyai.facerecognition_flutter"
+        applicationId "com.kbyai.asbt"
         minSdkVersion 24
         targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()

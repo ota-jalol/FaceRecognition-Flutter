@@ -35,7 +35,7 @@ class FaceTrackingService {
       debugPrint('🚀 Initializing FaceTrackingService...');
       
       // Get use cases from DI
-      _initializeTrackingService = AppDependencies.getIt<InitializeTrackingService>();
+      _initializeTrackingService = getIt<InitializeTrackingService>();
 
       // Initialize with default config
       final config = FaceTrackingConfig.defaultConfig();

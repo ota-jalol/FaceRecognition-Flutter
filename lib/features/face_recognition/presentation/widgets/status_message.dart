@@ -1,5 +1,5 @@
-import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_state.dart';
-import 'package:facerecognition_flutter/localization/my_localization.dart';
+import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_state.dart';
+import 'package:asbt/localization/my_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for displaying status messages based on face recognition state

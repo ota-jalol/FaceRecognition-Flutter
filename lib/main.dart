@@ -1,8 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:facerecognition_flutter/features/face_recognition/presentation/pages/face_id_take_photo_v2.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
+import 'package:asbt/features/face_recognition/presentation/pages/face_id_take_photo_v2.dart';
+import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,7 @@ void main() async {
       .initialize(supportedLocales: supportedLocales, actualLang: "uz");
 
   // Initialize dependencies
-  await AppDependencies.initialize();
+  await initializeAppDependencies(GetIt.instance);
 
   // Initialize face tracking service
   try {
@@ -80,7 +81,7 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppDependencies.getIt<FaceRecognitionBloc>(),
+      create: (context) => getIt<FaceRecognitionBloc>(),
       child: FaceIDTakePhoto(
         onTake: (photoBytes) {
           // Handle the captured photo bytes
