@@ -1,7 +1,7 @@
-import 'package:asbt/core/usecase/usecase.dart';
-import 'package:asbt/core/resources/data_state.dart';
-import 'package:asbt/features/face_tracking/domain/repository/face_tracking_repository.dart';
-import 'package:asbt/features/face_tracking/domain/models/face_tracking_config.dart';
+import 'package:facerecognition_flutter/core/usecase/usecase.dart';
+import 'package:facerecognition_flutter/core/resources/data_state.dart';
+import 'package:facerecognition_flutter/features/face_tracking/domain/repository/face_tracking_repository.dart';
+import 'package:facerecognition_flutter/features/face_tracking/domain/models/face_tracking_config.dart';
 
 /// Use case for initializing face tracking service
 class InitializeTrackingService implements UseCase<bool, FaceTrackingConfig> {

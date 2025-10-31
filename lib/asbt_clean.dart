@@ -27,7 +27,7 @@ export 'face_result_model.dart';
 // ============================================================================
 // Universal App Initialization Function
 // ============================================================================
-import 'package:asbt/core/di/app_dependencies.dart';
+import 'package:facerecognition_flutter/core/di/app_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'localization/my_localization.dart';

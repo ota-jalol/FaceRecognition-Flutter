@@ -26,7 +26,7 @@ class MyLocalization {
     _delegate = await LocalizationDelegate.create(
       fallbackLocale: supportedLocales.first,
       supportedLocales: supportedLocales,
-      basePath: 'packages/asbt/assets/i18n',
+      basePath: 'assets/i18n',
     );
 
     if (actualLang != null) {

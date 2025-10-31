@@ -1,13 +1,10 @@
-import 'package:asbt/core/constants/app_constants.dart';
-import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
-import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_state.dart';
-import 'package:asbt/features/face_recognition/presentation/widgets/face_detection_circle.dart';
-import 'package:asbt/features/face_recognition/presentation/widgets/status_message.dart';
-import 'package:asbt/features/face_recognition/presentation/widgets/tips_section.dart';
-import 'package:asbt/face_result_model.dart';
-import 'package:asbt/localization/my_localization.dart';
+import 'package:facerecognition_flutter/core/constants/app_constants.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/face_detection_circle.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/status_message.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/tips_section.dart';
+import 'package:facerecognition_flutter/face_result_model.dart';
+import 'package:facerecognition_flutter/localization/my_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
 /// Modern Face ID screen with clean architecture and BLoC pattern
@@ -198,73 +195,50 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
+    // Create a FaceResult based on current face detection data
+    FaceResult? currentFaceResult;
+    if (_faceDetected && _currentFaces != null && _currentFaces!.isNotEmpty) {
+      var face = _currentFaces!.first;
+      currentFaceResult = FaceResult(
+        faceDetected: true,
+        isCentered: _isCentered,
+        confidence: (face['liveness'] as num?)?.toDouble() ?? 0.0,
+        message: _currentMessage,
+        timestamp: DateTime.now(),
+        imageWidth: (face['frameWidth'] as num?)?.toDouble() ?? 0.0,
+        imageHeight: (face['frameHeight'] as num?)?.toDouble() ?? 0.0,
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: BlocConsumer<FaceRecognitionBloc, FaceRecognitionState>(
-        listener: (context, state) {
-          // Handle camera pause/resume based on state
-          if (state is FaceRecognitionCapturing) {
-          } else if (state is FaceRecognitionTracking) {
-          } else if (state is FaceRecognitionVerified) {}
-
-          // Handle state changes
-          if (state is FaceRecognitionVerified) {
-            // Photo was captured successfully
-            // Call onTake callback with photo bytes
-            if (state.photoBytes.isNotEmpty) {
-              widget.onTake(state.photoBytes);
-            }
-          }
-        },
-        builder: (context, state) {
-          // Create a custom state based on our face detection data
-          FaceRecognitionState currentState;
-          if (_faceDetected &&
-              _currentFaces != null &&
-              _currentFaces!.isNotEmpty) {
-            var face = _currentFaces!.first;
-            currentState = FaceRecognitionTracking(
-              faceResult: FaceResult(
-                faceDetected: true,
-                isCentered: _isCentered,
-                confidence: (face['liveness'] as num?)?.toDouble() ?? 0.0,
-                message: _currentMessage,
-                timestamp: DateTime.now(),
-                imageWidth: (face['frameWidth'] as num?)?.toDouble() ?? 0.0,
-                imageHeight: (face['frameHeight'] as num?)?.toDouble() ?? 0.0,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF0F4F8), // Light blue-grey
+              Color(0xFFF8FAFC), // Very light grey
+              Color(0xFFFFFFFF), // White
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: _buildMainContent(screenSize, currentFaceResult),
               ),
-            );
-          } else {
-            currentState = const FaceRecognitionInitial();
-          }
-
-          return Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFF0F4F8), // Light blue-grey
-                  Color(0xFFF8FAFC), // Very light grey
-                  Color(0xFFFFFFFF), // White
-                ],
-                stops: [0.0, 0.5, 1.0],
-              ),
-            ),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(child: _buildMainContent(screenSize, currentState)),
-                ],
-              ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildMainContent(Size screenSize, FaceRecognitionState state) {
+  Widget _buildMainContent(Size screenSize, FaceResult? faceResult) {
     final verticalSpacing = _calculateVerticalSpacing(screenSize);
 
     return SingleChildScrollView(
@@ -278,20 +252,20 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
             // Face detection area
             FaceDetectionCircle(
               screenSize: screenSize,
-              state: state,
+              state: faceResult,
               onFaceDetected: _onFaceDetected,
             ),
 
             SizedBox(height: verticalSpacing),
 
             // Status message
-            StatusMessage(state: state, screenSize: screenSize),
+            StatusMessage(state: faceResult, screenSize: screenSize),
 
             SizedBox(height: verticalSpacing * 0.6),
 
             // Tips section (only on larger screens)
             AnimatedOpacity(
-              opacity: _shouldShowTips(state, screenSize) ? 1.0 : 0.0,
+              opacity: _shouldShowTips(faceResult, screenSize) ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 500),
               child: TipsSection(screenSize: screenSize),
             ),
@@ -308,16 +282,19 @@ class _FaceIDTakePhotoViewState extends State<FaceIDTakePhotoView>
     return 30.0;
   }
 
-  bool _shouldShowTips(FaceRecognitionState state, Size screenSize) {
+  bool _shouldShowTips(FaceResult? faceResult, Size screenSize) {
     if (screenSize.height <= 550) return false;
 
-    if (state is FaceRecognitionVerifying ||
-        state is FaceRecognitionVerified ||
-        state is FaceRecognitionCapturing) {
+    // Don't show tips during photo capture
+    if (_isCapturingPhoto || _photoTaken) {
       return false;
     }
 
-    if (state is FaceRecognitionTracking) {
+    // Don't show tips when face is detected and centered
+    if (faceResult != null && 
+        faceResult.faceDetected && 
+        faceResult.isCentered && 
+        faceResult.confidence > 0.7) {
       return false;
     }
 

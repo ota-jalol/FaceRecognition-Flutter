@@ -159,7 +159,7 @@ The core recognition algorithm is completely broken:
 
 ### 4.1 Fixed pubspec.yaml
 ```yaml
-name: asbt
+name: facerecognition_flutter
 description: Professional Face Recognition Flutter Application
 publish_to: 'none'
 version: 1.0.0+1

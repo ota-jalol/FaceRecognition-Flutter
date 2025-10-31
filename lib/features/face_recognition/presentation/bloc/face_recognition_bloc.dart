@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_event.dart';
-import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_state.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_event.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// BLoC for managing face recognition state and business logic

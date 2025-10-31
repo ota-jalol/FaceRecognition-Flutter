@@ -1,4 +1,4 @@
-import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:facesdk_plugin/facesdk_plugin.dart';
 

@@ -1,11 +1,11 @@
-import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_state.dart';
-import 'package:asbt/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
+import 'package:facerecognition_flutter/face_result_model.dart';
+import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for displaying the face detection circle with camera preview
 class FaceDetectionCircle extends StatelessWidget {
   final Size screenSize;
-  final FaceRecognitionState state;
+  final FaceResult? state;
   final Function(List<dynamic>)? onFaceDetected;
 
   const FaceDetectionCircle({
@@ -71,31 +71,6 @@ class FaceDetectionCircle extends StatelessWidget {
                 child: Stack(
                   children: [
                     _buildCameraPreview(),
-                    // Loading overlay when capturing
-                    if (state is FaceRecognitionCapturing)
-                      Container(
-                        color: Colors.black.withOpacity(0.5),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 3,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Foto tayyorlanmoqda...',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: screenSize.width < 600 ? 12 : 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -118,18 +93,10 @@ class FaceDetectionCircle extends StatelessWidget {
   }
 
   Color _getDetectionColor() {
-    if (state is FaceRecognitionTracking) {
-      final trackingState = state as FaceRecognitionTracking;
-
-      if (trackingState.faceResult?.faceDetected == true) {
-        return trackingState.faceResult!.isCentered
-            ? const Color(0xFF10B981) // Emerald green - centered
-            : const Color(0xFF3B82F6); // Blue - not centered yet
-      }
-    }
-
-    if (state is FaceRecognitionVerified) {
-      return const Color(0xFF10B981); // Emerald green - success
+    if (state != null && state!.faceDetected) {
+      return state!.isCentered
+          ? const Color(0xFF10B981) // Emerald green - centered
+          : const Color(0xFF3B82F6); // Blue - not centered yet
     }
 
     // Default - searching for face
