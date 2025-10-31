@@ -82,7 +82,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: asbt.luxand.asbt
+        package: com.kbyai.asbt
         pluginClass: AsbtPlugin
       ios:
         pluginClass: AsbtPlugin
