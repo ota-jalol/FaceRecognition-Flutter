@@ -1,9 +1,9 @@
-import 'package:facerecognition_flutter/core/constants/app_constants.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/face_detection_circle.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/status_message.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/widgets/tips_section.dart';
-import 'package:facerecognition_flutter/face_result_model.dart';
-import 'package:facerecognition_flutter/localization/my_localization.dart';
+import 'package:asbt/core/constants/app_constants.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/face_detection_circle.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/status_message.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/tips_section.dart';
+import 'package:asbt/face_result_model.dart';
+import 'package:asbt/localization/my_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 

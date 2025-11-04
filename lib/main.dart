@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:facerecognition_flutter/features/face_recognition/presentation/pages/face_id_take_photo_v2.dart';
-import 'package:facerecognition_flutter/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
+import 'package:asbt/features/face_recognition/presentation/pages/face_id_take_photo_v2.dart';
+import 'package:asbt/features/face_recognition/presentation/bloc/face_recognition_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:async';
