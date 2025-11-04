@@ -5,12 +5,4 @@ import '../../../../core/resources/data_state.dart';
 abstract class FaceTrackingRepository {
   /// Initialize the KBY-AI Face SDK with configuration
   Future<DataState<bool>> initialize(FaceTrackingConfig config);
-
-  bool get isInitialized;
-
-  /// Get image dimensions
-  int get imageWidth;
-  int get imageHeight;
-
-  Future<DataState<void>> dispose();
 }
