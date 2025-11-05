@@ -21,8 +21,6 @@ class CameraPreviewWidget extends StatefulWidget {
 }
 
 class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
-  dynamic _faces;
-  double _livenessThreshold = 0.7;
   FaceDetectionViewController? faceDetectionViewController;
 
   @override
@@ -38,13 +36,7 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   }
 
   Future<void> _loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? livenessThreshold = prefs.getString("liveness_threshold");
-    if (mounted) {
-      setState(() {
-        _livenessThreshold = double.parse(livenessThreshold ?? "0.7");
-      });
-    }
+   
   }
 
   Future<void> _onFaceDetected(dynamic faces) async {
@@ -60,10 +52,6 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
         facesList = [faces];
       }
     }
-    
-    setState(() {
-      _faces = facesList;
-    });
 
     // Call the callback if provided
     if (widget.onFaceDetected != null) {
@@ -82,16 +70,7 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
             faceDetectionViewController = controller;
           },
         ),
-        // Face detection overlay
-        // if (_faces != null)
-        //   Positioned.fill(
-        //     child: CustomPaint(
-        //       painter: FacePainter(
-        //         faces: _faces,
-        //         livenessThreshold: _livenessThreshold,
-        //       ),
-        //     ),
-        //   ),
+        
       ],
     );
   }

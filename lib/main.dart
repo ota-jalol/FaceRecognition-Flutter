@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/app_dependencies.dart';
-import 'features/face_tracking/presentation/services/face_tracking_service.dart';
 import 'localization/my_localization.dart';
 
 void main() async {
@@ -21,13 +20,6 @@ void main() async {
 
   // Initialize dependencies
   await initializeAppDependencies(GetIt.instance);
-
-  // Initialize face tracking service
-  try {
-    await FaceTrackingService.instance.initialize();
-  } catch (e) {
-    debugPrint('⚠️ Failed to initialize FaceTrackingService in main: $e');
-  }
 
   runApp(const MyApp());
 }

@@ -1,5 +1,6 @@
 import 'package:asbt/face_result_model.dart';
 import 'package:asbt/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
+import 'package:asbt/features/face_recognition/presentation/widgets/facedetectionview.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for displaying the face detection circle with camera preview
@@ -7,7 +8,6 @@ class FaceDetectionCircle extends StatelessWidget {
   final Size screenSize;
   final FaceResult? state;
   final Function(List<dynamic>)? onFaceDetected;
-
   const FaceDetectionCircle({
     required this.screenSize,
     required this.state,
@@ -19,6 +19,7 @@ class FaceDetectionCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     final double baseSize = _calculateBaseSize();
     final size = baseSize.clamp(150.0, 240.0);
+    FaceRecognitionViewState ? faceRecognitionViewState;
 
     return Center(
       child: Stack(
@@ -110,7 +111,7 @@ class FaceDetectionCircle extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: CameraPreviewWidget(
+          child: FaceRecognitionView(
             onFaceDetected: (faces) {
               // Handle face detection events and forward to parent
               if (onFaceDetected != null) {

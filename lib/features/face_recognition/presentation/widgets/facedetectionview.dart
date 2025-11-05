@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,8 @@ import 'package:facesdk_plugin/facesdk_plugin.dart';
 // ignore: must_be_immutable
 class FaceRecognitionView extends StatefulWidget {
   FaceDetectionViewController? faceDetectionViewController;
-
-  FaceRecognitionView({super.key});
+ final Function(List<dynamic> faces)? onFaceDetected;
+  FaceRecognitionView({super.key,this.onFaceDetected});
 
   @override
   State<StatefulWidget> createState() => FaceRecognitionViewState();
@@ -37,7 +38,71 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
   @override
   void initState() {
     super.initState();
+    init();
+  }
+  Future<void> init() async {
+    int facepluginState = -1;
+    String warningState = "";
+    bool visibleWarning = false;
 
+    try {
+      if (Platform.isAndroid) {
+        await _facesdkPlugin
+            .setActivation(
+                "j63rQnZifPT82LEDGFa+wzorKx+M55JQlNr+S0bFfvMULrNYt+UEWIsa11V/Wk1bU9Srti0/FQqp"
+                "UczeCxFtiEcABmZGuTzNd27XnwXHUSIMaFOkrpNyNE4MHb7HBm5kU/0J/SAMfybICCWyFajuZ4fL"
+                "agozJV5DPKj22oFVaueWMjO/9fMvcps4u1AIiHH2rjP4mEYfiAE8nhHBa1Ou3u/WkXj6jdDafyJo"
+                "AFtQHYJYKDU+hcbtCZ3P1f8y1JB5JxOf92ItK4euAt6/OFG9jGfKpo/Fs2mAgwxH3HoWMLJQ16Iy"
+                "u2K6boMyDxRQtBJFTiktuJ+ltlay+dVqIi3Jpg==")
+            .then((value) => facepluginState = value ?? -1);
+      } else {
+        await _facesdkPlugin
+            .setActivation(
+                "qtUa0F+8kUQ3IKx0KnH7INdhZobNEry1toTG1IqYBCeFFj66uMc2Znp3Tlj+fPdO212bCJrRCK27"
+                "xKyn0qNtbRene869aUDxMf9nZyPDVDuWoz6TZKdKhgAGlQ65RoLAunUrbLfIwR/OqqZU8zwxwAYU"
+                "BPn6f7X0zkoAFDwMUgBMR87RQdLDkGssfCDOmyOYW3qq1hX9k9FZvFMuC6nzJQhQgAy1edFJ4YuW"
+                "g5BKXKsulTTzq2cPwz0qPUNp1qR75OitXjo9KoojhJEM6Hj7n8l6ydcPpZpdpUURrn5/7RLEVteX"
+                "l84vhHGm6jXjOftcNdR1ikC7wM2hhfVQuhK0gA==")
+            .then((value) => facepluginState = value ?? -1);
+      }
+
+      if (facepluginState == 0) {
+        await _facesdkPlugin
+            .init()
+            .then((value) => facepluginState = value ?? -1);
+      }
+    } catch (e) {}
+
+    final prefs = await SharedPreferences.getInstance();
+    int? livenessLevel = prefs.getInt("liveness_level");
+
+    try {
+      await _facesdkPlugin
+          .setParam({'check_liveness_level': livenessLevel ?? 0});
+    } catch (e) {}
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    if (facepluginState == -1) {
+      warningState = "Invalid license!";
+      visibleWarning = true;
+    } else if (facepluginState == -2) {
+      warningState = "License expired!";
+      visibleWarning = true;
+    } else if (facepluginState == -3) {
+      warningState = "Invalid license!";
+      visibleWarning = true;
+    } else if (facepluginState == -4) {
+      warningState = "No activated!";
+      visibleWarning = true;
+    } else if (facepluginState == -5) {
+      warningState = "Init error!";
+      visibleWarning = true;
+    }
+    
     loadSettings();
   }
 
@@ -64,6 +129,7 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
   }
 
   Future<bool> onFaceDetected(faces) async {
+    widget.onFaceDetected?.call(faces);
     if (_recognized == true) {
       return false;
     }
