@@ -1,5 +1,4 @@
 import 'package:asbt/face_result_model.dart';
-import 'package:asbt/features/face_recognition/presentation/widgets/camera_preview_widget.dart';
 import 'package:asbt/features/face_recognition/presentation/widgets/facedetectionview.dart';
 import 'package:flutter/material.dart';
 

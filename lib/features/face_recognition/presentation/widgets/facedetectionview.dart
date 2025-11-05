@@ -196,14 +196,14 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
         body: Stack(
           children: <Widget>[
             FaceDetectionView(faceRecognitionViewState: this),
-            SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: CustomPaint(
-                painter: FacePainter(
-                    faces: _faces, livenessThreshold: _livenessThreshold),
-              ),
-            ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   height: double.infinity,
+            //   child: CustomPaint(
+            //     painter: FacePainter(
+            //         faces: _faces, livenessThreshold: _livenessThreshold),
+            //   ),
+            // ),
             Visibility(
                 visible: _recognized,
                 child: Container(
@@ -455,9 +455,9 @@ class FacePainter extends CustomPainter {
 
         paint.color = color;
         canvas.drawRect(
-            Offset(face['x1'] / xScale, face['y1'] / yScale) &
+            Offset(face['x1'] / xScale, face['y1'] / yScale-10) &
                 Size((face['x2'] - face['x1']) / xScale,
-                    (face['y2'] - face['y1']) / yScale),
+                    (face['y2'] - face['y1']) / yScale +50),
             paint);
       }
     }
