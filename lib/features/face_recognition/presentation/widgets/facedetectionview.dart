@@ -47,13 +47,17 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
 
     try {
       if (Platform.isAndroid) {
+       //j63rQnZifPT82LEDGFa+wzorKx+M55JQlNr+S0bFfvMULrNYt+UEWIsa11V/Wk1bU9Srti0/FQqp"
+                //"UczeCxFtiEcABmZGuTzNd27XnwXHUSIMaFOkrpNyNE4MHb7HBm5kU/0J/SAMfybICCWyFajuZ4fL"
+                //"agozJV5DPKj22oFVaueWMjO/9fMvcps4u1AIiHH2rjP4mEYfiAE8nhHBa1Ou3u/WkXj6jdDafyJo"
+                //"AFtQHYJYKDU+hcbtCZ3P1f8y1JB5JxOf92ItK4euAt6/OFG9jGfKpo/Fs2mAgwxH3HoWMLJQ16Iy"
+                //"u2K6boMyDxRQtBJFTiktuJ+ltlay+dVqIi3Jpg==
         await _facesdkPlugin
             .setActivation(
-                "j63rQnZifPT82LEDGFa+wzorKx+M55JQlNr+S0bFfvMULrNYt+UEWIsa11V/Wk1bU9Srti0/FQqp"
-                "UczeCxFtiEcABmZGuTzNd27XnwXHUSIMaFOkrpNyNE4MHb7HBm5kU/0J/SAMfybICCWyFajuZ4fL"
-                "agozJV5DPKj22oFVaueWMjO/9fMvcps4u1AIiHH2rjP4mEYfiAE8nhHBa1Ou3u/WkXj6jdDafyJo"
-                "AFtQHYJYKDU+hcbtCZ3P1f8y1JB5JxOf92ItK4euAt6/OFG9jGfKpo/Fs2mAgwxH3HoWMLJQ16Iy"
-                "u2K6boMyDxRQtBJFTiktuJ+ltlay+dVqIi3Jpg==")
+                "uxEwZEiyufiqON8jz9VoPp5CIWquRmrBHd3uaaWW1dr3Wu02MKbmgvG3ETMKVNoK714xAqMAwYTx"
+                "f+QW+Z9z1txH7TF6ehkt96t5pJdmj81TH/OTVGTGsh5Mx6TQLOieV70U6SqkOAVP7kGBgaADkxt"
+                "QXqupz+PmzXeW64v1ipEHGMVDbm/RjEX+d10vRnrnCrMXrt9jYXqbUN3MwQCIQfyP4GgXW7ZLOsX"
+                "s+AXBevZRRMVfNlGzGmNmOFVLADm1AaGywLwgjV09TXgJumvh/gw/7rRh130wqkxEL2nOKCQBykM")
             .then((value) => facepluginState = value ?? -1);
       } else {
         await _facesdkPlugin
