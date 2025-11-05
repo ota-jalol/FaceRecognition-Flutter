@@ -78,7 +78,7 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
 
     try {
       await _facesdkPlugin
-          .setParam({'check_liveness_level': livenessLevel ?? 0});
+          .setParam({'check_liveness_level': livenessLevel ?? 1});
     } catch (e) {}
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -188,11 +188,11 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Face Recognition'),
-          toolbarHeight: 70,
-          centerTitle: true,
-        ),
+        // appBar: AppBar(
+        //   title: const Text('Face Recognition'),
+        //   toolbarHeight: 70,
+        //   centerTitle: true,
+        // ),
         body: Stack(
           children: <Widget>[
             FaceDetectionView(faceRecognitionViewState: this),

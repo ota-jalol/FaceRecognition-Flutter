@@ -18,7 +18,6 @@ class FaceDetectionCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     final double baseSize = _calculateBaseSize();
     final size = baseSize.clamp(150.0, 240.0);
-    FaceRecognitionViewState ? faceRecognitionViewState;
 
     return Center(
       child: Stack(
