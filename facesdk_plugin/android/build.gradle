@@ -65,8 +65,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'  // Updated from 1.8.0
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'  // Kept same
 
-    implementation project(":libfotoapparat")
-    implementation project(":libfacesdk")
+    api project(":libfotoapparat")
+    api project(":libfacesdk")
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testImplementation 'org.mockito:mockito-core:5.11.0'  // Updated from 5.0.0
