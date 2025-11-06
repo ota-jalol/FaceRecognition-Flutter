@@ -10,8 +10,8 @@ import 'package:facesdk_plugin/facesdk_plugin.dart';
 // ignore: must_be_immutable
 class FaceRecognitionView extends StatefulWidget {
   FaceDetectionViewController? faceDetectionViewController;
- final Function(List<dynamic> faces)? onFaceDetected;
-  FaceRecognitionView({super.key,this.onFaceDetected});
+  final Function(List<dynamic> faces)? onFaceDetected;
+  FaceRecognitionView({super.key, this.onFaceDetected});
 
   @override
   State<StatefulWidget> createState() => FaceRecognitionViewState();
@@ -40,6 +40,7 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
     super.initState();
     init();
   }
+
   Future<void> init() async {
     int facepluginState = -1;
     String warningState = "";
@@ -47,17 +48,18 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
 
     try {
       if (Platform.isAndroid) {
-       //j63rQnZifPT82LEDGFa+wzorKx+M55JQlNr+S0bFfvMULrNYt+UEWIsa11V/Wk1bU9Srti0/FQqp"
-                //"UczeCxFtiEcABmZGuTzNd27XnwXHUSIMaFOkrpNyNE4MHb7HBm5kU/0J/SAMfybICCWyFajuZ4fL"
-                //"agozJV5DPKj22oFVaueWMjO/9fMvcps4u1AIiHH2rjP4mEYfiAE8nhHBa1Ou3u/WkXj6jdDafyJo"
-                //"AFtQHYJYKDU+hcbtCZ3P1f8y1JB5JxOf92ItK4euAt6/OFG9jGfKpo/Fs2mAgwxH3HoWMLJQ16Iy"
-                //"u2K6boMyDxRQtBJFTiktuJ+ltlay+dVqIi3Jpg==
+        //j63rQnZifPT82LEDGFa+wzorKx+M55JQlNr+S0bFfvMULrNYt+UEWIsa11V/Wk1bU9Srti0/FQqp"
+        //"UczeCxFtiEcABmZGuTzNd27XnwXHUSIMaFOkrpNyNE4MHb7HBm5kU/0J/SAMfybICCWyFajuZ4fL"
+        //"agozJV5DPKj22oFVaueWMjO/9fMvcps4u1AIiHH2rjP4mEYfiAE8nhHBa1Ou3u/WkXj6jdDafyJo"
+        //"AFtQHYJYKDU+hcbtCZ3P1f8y1JB5JxOf92ItK4euAt6/OFG9jGfKpo/Fs2mAgwxH3HoWMLJQ16Iy"
+        //"u2K6boMyDxRQtBJFTiktuJ+ltlay+dVqIi3Jpg==
         await _facesdkPlugin
             .setActivation(
-                "uxEwZEiyufiqON8jz9VoPp5CIWquRmrBHd3uaaWW1dr3Wu02MKbmgvG3ETMKVNoK714xAqMAwYTx"
-                "f+QW+Z9z1txH7TF6ehkt96t5pJdmj81TH/OTVGTGsh5Mx6TQLOieV70U6SqkOAVP7kGBgaADkxt"
-                "QXqupz+PmzXeW64v1ipEHGMVDbm/RjEX+d10vRnrnCrMXrt9jYXqbUN3MwQCIQfyP4GgXW7ZLOsX"
-                "s+AXBevZRRMVfNlGzGmNmOFVLADm1AaGywLwgjV09TXgJumvh/gw/7rRh130wqkxEL2nOKCQBykM")
+                "uxEwZEiyufiqON8jz9VoPp5ClWquRmrBHd3uaaWWldr3Wuo2MKbmgvG3ETMKVNoK7l4xAqMAwYTx"
+                "f+QYv+Z9zltxH7TF6ehkt96t5pJdmj81TH/0TVGTGsh5Mx6TQLOieV7OU6Sqk0AVP7kGBgaADkxt"
+                "QXqupz+PmzXeW64v1ipEHGMVDbm/RjEX+dl0vRnrnCrMXrt9jYXqbUN3MwQClQfyP4GgXW7ZLOsX"
+                "s+AXBevZRRMVfNIGzGmNm0FVLADm1AaGywLwgjV09TXgJumvh/gw/7rRhl3OwqkxEL2n0KCQBykM"
+                "YLQ5CQzWSHKxkN8aux3OhcSnOzEuJwf96LJ6/A==")
             .then((value) => facepluginState = value ?? -1);
       } else {
         await _facesdkPlugin
@@ -106,7 +108,7 @@ class FaceRecognitionViewState extends State<FaceRecognitionView> {
       warningState = "Init error!";
       visibleWarning = true;
     }
-    
+    print(warningState);
     loadSettings();
   }
 
@@ -459,9 +461,9 @@ class FacePainter extends CustomPainter {
 
         paint.color = color;
         canvas.drawRect(
-            Offset(face['x1'] / xScale, face['y1'] / yScale-10) &
+            Offset(face['x1'] / xScale, face['y1'] / yScale - 10) &
                 Size((face['x2'] - face['x1']) / xScale,
-                    (face['y2'] - face['y1']) / yScale +50),
+                    (face['y2'] - face['y1']) / yScale + 50),
             paint);
       }
     }
